@@ -8,7 +8,7 @@ class Encoder(nn.Module):
     def __init__(self, enc_voc_size, max_length, embedding, ffn_hidden, n_head, n_layers, dropout, device):
         super(Encoder, self).__init__()
         self.emb = TransformerEncoding(vocab_size=enc_voc_size, embedding=embedding, max_length=max_length, dropout=dropout, device=device)
-        self.layers = nn.ModuleList([EncoderLayer(embedding_dim=embedding, n_head=n_head, dropout=dropout)
+        self.layers = nn.ModuleList([EncoderLayer(embedding_dim=embedding, n_head=n_head, hidden_dim=ffn_hidden, dropout=dropout)
                                     for _ in range(n_layers)])
         
     

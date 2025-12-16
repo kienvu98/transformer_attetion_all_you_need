@@ -43,4 +43,33 @@ class TranslateDataset(Dataset):
     def __len__(self):
         return len(self.source_data)
     
+    def __getitem__(self, index):
     
+        source = self.source_tokenizer(
+            text = self.preprocess_seq(self.source_data[index]),
+            padding = "max_length",
+            max_length = self.source_max_length,
+            truncation = True,
+            return_tensors = "pt"
+        )
+    
+        if self.phase == "train":
+            target = self.target_tokenizer(
+                text=self.preprocess_seq(self.target_data[index]),
+                padding="max_length",
+                max_length=self.target_max_seq_len,
+                truncation=True,
+                return_tensors="pt"
+            )
+
+            return {
+                "source_seq": self.source_data[index],
+                "source_ids": source["input_ids"][0],
+                "target_seq": self.target_data[index],
+                "target_ids": target["input_ids"][0],
+                }
+        else:
+            return {
+                "source_seq": self.source_data[index],
+                "source_ids": source["input_ids"][0],
+            }
